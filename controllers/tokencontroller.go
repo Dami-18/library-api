@@ -9,7 +9,7 @@ import (
 )
 
 type TokenRequest struct { // this are the payloads of request
-	Email    string `json:"email"`
+	Username string `json:"username" gorm:"unique"`
 	Password string `json:"password"`
 }
 
@@ -23,7 +23,7 @@ func GenerateToken(context *gin.Context) {
 		return
 	}
 	// check if user already exists, if exists then check if password matches
-	record := database.Instance.Where("email = ?", request.Email).First(&user)
+	record := database.Instance.Where("username = ?", request.Username).First(&user)
 	if record.Error != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": record.Error.Error()})
 		context.Abort()
@@ -37,7 +37,7 @@ func GenerateToken(context *gin.Context) {
 		return
 	}
 
-	tokenString, err := auth.GenerateJWT(user.Email, user.Username) // if no such user, then register that user
+	tokenString, err := auth.GenerateJWT(user.Username) // if no such user, then register that user
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		context.Abort()
