@@ -11,7 +11,9 @@ var Instance *gorm.DB // Instance will be globally imported along with its metho
 var dbError error
 
 func ConnectDb(connectionString string){
-	Instance, dbError = gorm.Open(mysql.Open(connectionString), &gorm.Config{})
+	Instance, dbError = gorm.Open(mysql.Open(connectionString), &gorm.Config{
+		QueryFields: true, // for advanced querying
+	})
 
 	if dbError != nil{
 		log.Fatal(dbError)
