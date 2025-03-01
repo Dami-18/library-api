@@ -9,6 +9,7 @@ type User struct {
 	gorm.Model
 	Username string `json:"username" gorm:"unique"`
 	Password string `json:"password"`
+	Role string `json:"role"` // role based access, admin or user
 }
 
 // Helper methods
