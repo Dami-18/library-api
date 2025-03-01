@@ -11,13 +11,15 @@ var jwtKey = []byte("secretkey")
 
 type JWTClaim struct {
 	Username string `json:"username"`
+	ID       uint    `json:"userId" gorm:"primaryKey"`
 	jwt.StandardClaims
 }
 
-func GenerateJWT(username string) (tokenString string, err error) {
+func GenerateJWT(username string, userId uint) (tokenString string, err error) {
 	expirationTime := time.Now().Add(2 * time.Hour)
 	claims := &JWTClaim{
 		Username: username,
+		ID: userId,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -27,7 +29,7 @@ func GenerateJWT(username string) (tokenString string, err error) {
 	return
 }
 
-func ValidateToken(signedToken string) (err error) {
+func ValidateTokenAndGetClaims(signedToken string) (claim JWTClaim, err error) {
 	token, err := jwt.ParseWithClaims(
 	  signedToken,
 	  &JWTClaim{},
@@ -48,6 +50,7 @@ func ValidateToken(signedToken string) (err error) {
 	  err = errors.New("token expired")
 	  return
 	}
-	
+
+	claim = *claims
 	return
   }

@@ -11,6 +11,7 @@ import (
 type TokenRequest struct { // this are the payloads of request
 	Username string `json:"username" gorm:"unique"`
 	Password string `json:"password"`
+	ID       uint   `json:"id" gorm:"primaryKey"`
 }
 
 func GenerateToken(context *gin.Context) {
@@ -37,7 +38,7 @@ func GenerateToken(context *gin.Context) {
 		return
 	}
 
-	tokenString, err := auth.GenerateJWT(user.Username) // if no such user, then register that user
+	tokenString, err := auth.GenerateJWT(user.Username, user.ID) // if no such user, then register that user
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		context.Abort()

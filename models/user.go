@@ -6,10 +6,10 @@ import (
 )
 
 type User struct {
-	gorm.Model
+	gorm.Model // has ID
 	Username string `json:"username" gorm:"unique"`
 	Password string `json:"password"`
-	Role string `json:"role"` // role based access, admin or user
+	Role string `json:"role" gorm:"default:user"` // role based access, admin or user
 }
 
 // Helper methods

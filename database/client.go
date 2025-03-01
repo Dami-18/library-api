@@ -21,7 +21,7 @@ func ConnectDb(connectionString string){
 }
 
 func Migrate(){
-	Instance.AutoMigrate(&models.User{})
+	Instance.AutoMigrate(&models.User{},&models.Book{}) // both tables 
 	log.Println("Database migration complete!")
 }
 
