@@ -1,6 +1,5 @@
-# OpenSoft-MT
+# library-api
 basic authentication system in Go<br>
-[learnings](https://shell-wren-fa3.notion.site/open-soft-MT-backend-1a2fb0ef406f80b1a715f5bff8818fcb?pvs=4)<br>
 
 # Setup
 Install dependencies:<br>
@@ -11,8 +10,8 @@ Then setup MySQL and start the server using `sudo systemctl start mysql`<br>
 
 Clone the repo:
 ```bash
-git clone https://github.com/Dami-18/OpenSoft-MT.git
-cd OpenSoft-MT
+git clone https://github.com/Dami-18/library-api.git
+cd library-api
 ```
 
 Copy .env template:

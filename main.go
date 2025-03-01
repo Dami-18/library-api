@@ -1,8 +1,8 @@
 package main
 
 import (
-	"OpenSoft-MT/database"
-	"OpenSoft-MT/routes"
+	"library-api/database"
+	"library-api/routes"
 	"fmt"
 	"log"
 	"os"

@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"OpenSoft-MT/controllers"
-	"OpenSoft-MT/middlewares"
+	"library-api/controllers"
+	"library-api/middlewares"
 	"github.com/gin-gonic/gin"
 )
 

@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"OpenSoft-MT/database"
-	"OpenSoft-MT/models"
+	"library-api/database"
+	"library-api/models"
 	"net/http"
 	"github.com/gin-gonic/gin"
 )

@@ -1,7 +1,7 @@
 package middlewares
 
 import(
-	"OpenSoft-MT/auth"
+	"library-api/auth"
 	"github.com/gin-gonic/gin"
 )
 

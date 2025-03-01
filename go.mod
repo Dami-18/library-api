@@ -1,4 +1,4 @@
-module OpenSoft-MT
+module library-api
 
 go 1.24.0
 
