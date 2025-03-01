@@ -5,6 +5,7 @@ import (
 	"library-api/models"
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"strconv"
 )
 
 func AddBook(context *gin.Context){ // Add a new book
@@ -36,4 +37,11 @@ func AddBook(context *gin.Context){ // Add a new book
 
 	context.JSON(http.StatusCreated, gin.H{"bookID":book.ID, "title":book.Title, "author":book.Author, "genre":book.Author, "rating":book.Rating})
 }
+
+// func GetBooks(context *gin.Context) {
+// 	genre, genreExists := context.GetQuery("genre")
+// 	rating, ratingExists := context.GetQuery("rating")
+
+
+// }
 
