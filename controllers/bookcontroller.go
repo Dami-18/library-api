@@ -7,6 +7,7 @@ import (
 	"library-api/models"
 	"net/http"
 	"strconv"
+	"fmt"
 )
 
 func Paginate(context *gin.Context) func(db *gorm.DB) *gorm.DB {
@@ -75,7 +76,7 @@ func AddBook(context *gin.Context) { // Add a new book
 		return
 	}
 
-	context.JSON(http.StatusCreated, gin.H{"bookID": book.ID, "title": book.Title, "author": book.Author, "genre": book.Author, "rating": book.Rating})
+	context.JSON(http.StatusCreated, gin.H{"bookID": book.ID, "title": book.Title, "author": book.Author, "genre": book.Genre, "rating": book.Rating})
 }
 
 func GetBooks(context *gin.Context) { // filters and pagination
@@ -101,11 +102,20 @@ func GetBookByID(context *gin.Context) {
 	var book models.Book
 	id := context.Param("id")
 
-	if err := database.Instance.First(&book, id).Error; err != nil {
+	fmt.Println("Searching for book ID:", id) // debugging
+
+	bookID, err := strconv.Atoi(id)
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "Invalid book ID format"})
+		return
+	}
+
+	if err := database.Instance.First(&book, uint(bookID)).Error; err != nil {
 		context.JSON(http.StatusNotFound, gin.H{"error": "Book not found!"})
 		context.Abort()
 		return
 	}
-
+	
 	context.JSON(http.StatusOK, gin.H{"data":book})
 }

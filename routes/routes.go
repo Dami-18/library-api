@@ -15,7 +15,8 @@ func InitRouter() *gin.Engine {
 
 		api.POST("/books",middlewares.Auth(), middlewares.AdminOnly(), controllers.AddBook)
 		api.GET("/books",controllers.GetBooks)
-		api.GET("/books:id",controllers.GetBookByID) // need to specify optional paramters
+		api.GET("/books/:id",controllers.GetBookByID) // need to specify optional paramters after another '/:'
+
 		secured := api.Group("/secured").Use(middlewares.Auth())
 		{
 			secured.GET("/ping",controllers.Ping)

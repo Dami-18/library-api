@@ -11,7 +11,7 @@ import (
 type TokenRequest struct { // this are the payloads of request
 	Username string `json:"username" gorm:"unique"`
 	Password string `json:"password"`
-	ID       uint   `json:"id" gorm:"primaryKey"`
+	ID       uint   `json:"id" gorm:"primaryKey"` // primary key means on basis of this, book will be found in database, if not done explicit field querying
 }
 
 func GenerateToken(context *gin.Context) {
