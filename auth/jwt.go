@@ -11,7 +11,7 @@ var jwtKey = []byte("secretkey")
 
 type JWTClaim struct {
 	Username string `json:"username"`
-	ID       uint    `json:"userId" gorm:"primaryKey"`
+	ID       uint   `json:"userId" gorm:"primaryKey"`
 	jwt.StandardClaims
 }
 

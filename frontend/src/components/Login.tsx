@@ -32,7 +32,7 @@ const Login: React.FC = () => {
             />
           </div>
 
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label htmlFor="id" className="block text-gray-700 font-medium mb-2">
               ID
             </label>
@@ -42,7 +42,7 @@ const Login: React.FC = () => {
               placeholder="Enter your ID"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-          </div>
+          </div> */}
 
           <div className="mt-6">
             <button

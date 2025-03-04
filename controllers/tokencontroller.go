@@ -11,14 +11,14 @@ import (
 type TokenRequest struct { // this are the payloads of request
 	Username string `json:"username" gorm:"unique"`
 	Password string `json:"password"`
-	ID       uint   `json:"id" gorm:"primaryKey"` // primary key means on basis of this, book will be found in database, if not done explicit field querying
+	// ID       uint   `json:"id" gorm:"primaryKey"` // primary key means on basis of this, book will be found in database, if not done explicit field querying
 }
 
 func GenerateToken(context *gin.Context) {
 	var request TokenRequest
 	var user models.User
 
-	if err := context.ShouldBindJSON(&request); err != nil {
+	if err := context.ShouldBindJSON(&request); err != nil { // in should bind json, we pass the reference of that struct which will be sent as JSON data body via POST request
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		context.Abort()
 		return
