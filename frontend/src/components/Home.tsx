@@ -1,5 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BACKEND_URL } from './url';
+
+interface Book { // this should match with the struct definition of Book model in backend to directly use this
+  ID: string;
+  Title: string;
+  Author: string;
+  Genre: string;
+  Rating: number;
+}
+
 
 const Home: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -10,6 +19,10 @@ const Home: React.FC = () => {
   const [filterGenre, setFilterGenre] = useState('');
   const [searchId, setSearchId] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [books, setBooks] = useState<Book[]>([]); // initially empty
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddBook = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +41,7 @@ const Home: React.FC = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ title, author, genre , rating: Number(rating)})
+        body: JSON.stringify({ title: title, author: author, genre: genre, rating: rating })
       });
 
       if (!response.ok) {
@@ -38,7 +51,7 @@ const Home: React.FC = () => {
 
       const data = await response.json();
       console.log('Book added successfully:', data);
-      
+
       // Clear the form
       setTitle('');
       setAuthor('');
@@ -51,10 +64,40 @@ const Home: React.FC = () => {
     }
   };
 
-  const handleFilter = () => {
-    // Filter books logic here
-    console.log('Filtering books:', { rating: filterRating, genre: filterGenre });
+  const handleFilter = async () => {
+    // console.log('Filtering books:', { rating: filterRating, genre: filterGenre });
+    setIsLoading(true);
+    try {
+
+      const queryParams = new URLSearchParams();
+      if (filterRating) queryParams.append('rating', filterRating);
+      if (filterGenre) queryParams.append('genre', filterGenre);
+      queryParams.append('page', currentPage.toString());
+      queryParams.append('limit', '10');
+
+      const response = await fetch(`${BACKEND_URL}/books?${queryParams.toString()}`);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch books');
+      }
+      const data = await response.json();
+      setBooks(data.data); // need to change this according to the response format 
+      setTotalPages(Math.ceil(data.total / parseInt(data.limit)));
+      setCurrentPage(parseInt(data.page) || 1);
+
+    } catch (error) {
+      console.error('Error fetching books:', error);
+      setError('Failed to fetch books. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    if (filterRating || filterGenre) {
+      handleFilter();
+    }
+  }, [currentPage]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,7 +147,7 @@ const Home: React.FC = () => {
             step="0.1"
             className="w-full p-2 border rounded"
           />
-          
+
           <button type="submit" className="w-full bg-purple-500 text-white p-2 rounded hover:bg-purple-600">
             Add Book
           </button>
@@ -154,6 +197,60 @@ const Home: React.FC = () => {
           </button>
         </form>
       </div>
+
+      {/* Display of filtered books */}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : books.length > 0 ? (
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4">Filtered Books</h2>
+
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border border-gray-300 p-2">ID</th>
+                <th className="border border-gray-300 p-2">Title</th>
+                <th className="border border-gray-300 p-2">Author</th>
+                <th className="border border-gray-300 p-2">Genre</th>
+                <th className="border border-gray-300 p-2">Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              {books.map((book) => (
+                <tr key={book.ID}>
+                  <td className="border border-gray-300 p-2">{book.ID}</td>
+                  <td className="border border-gray-300 p-2">{book.Title}</td>
+                  <td className="border border-gray-300 p-2">{book.Author}</td>
+                  <td className="border border-gray-300 p-2">{book.Genre}</td>
+                  <td className="border border-gray-300 p-2">{book.Rating}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="mt-4 flex justify-center">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="bg-purple-500 text-white p-2 rounded hover:bg-purple-600 mr-2"
+            >
+              Previous
+            </button>
+            <span className="p-2">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="bg-purple-500 text-white p-2 rounded hover:bg-purple-600 ml-2"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      ) : null}
+
+
     </div>
   );
 };

@@ -92,8 +92,8 @@ func GetBooks(context *gin.Context) { // filters and pagination
 	context.JSON(http.StatusOK, gin.H{
 		"data":  books,
 		"total": result.RowsAffected, // number of matching records found
-		"page":  context.Query("page"),
-		"limit": context.Query("limit"),
+		"page":  "1",
+		"limit": "10", // hard coded for now
 	})
 }
 
