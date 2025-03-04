@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BACKEND_URL } from './url';
 
 const Home: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -8,11 +9,46 @@ const Home: React.FC = () => {
   const [filterRating, setFilterRating] = useState('');
   const [filterGenre, setFilterGenre] = useState('');
   const [searchId, setSearchId] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-  const handleAddBook = (e: React.FormEvent) => {
+  const handleAddBook = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add book logic here
-    console.log('Book added:', { title, author, rating, genre });
+    setError(null);
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setError('You must be logged in to add a book.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/books`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ title, author, genre , rating: Number(rating)})
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add book');
+      }
+
+      const data = await response.json();
+      console.log('Book added successfully:', data);
+      
+      // Clear the form
+      setTitle('');
+      setAuthor('');
+      setRating('');
+      setGenre('');
+
+    } catch (err: any) {
+      console.error('Error adding book:', err.message);
+      setError(err.message);
+    }
   };
 
   const handleFilter = () => {
@@ -33,6 +69,7 @@ const Home: React.FC = () => {
       {/* Add Book Form */}
       <div className="mb-8 bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4">Add a New Book</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleAddBook} className="space-y-4">
           <input
             type="text"
@@ -48,13 +85,7 @@ const Home: React.FC = () => {
             onChange={(e) => setAuthor(e.target.value)}
             className="w-full p-2 border rounded"
           />
-          <input
-            type="text"
-            placeholder="Rating (1-5)"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
-            className="w-full p-2 border rounded"
-          />
+
           <input
             type="text"
             placeholder="Genre"
@@ -62,6 +93,18 @@ const Home: React.FC = () => {
             onChange={(e) => setGenre(e.target.value)}
             className="w-full p-2 border rounded"
           />
+
+          <input
+            type="number"
+            placeholder="Rating (1-5)"
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
+            min="0"
+            max="5"
+            step="0.1"
+            className="w-full p-2 border rounded"
+          />
+          
           <button type="submit" className="w-full bg-purple-500 text-white p-2 rounded hover:bg-purple-600">
             Add Book
           </button>
