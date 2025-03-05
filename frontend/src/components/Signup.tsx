@@ -76,8 +76,8 @@ function Signup() {
               onChange={(e) => setRole(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
+              <option value="user">user</option>
+              <option value="admin">admin</option>
             </select>
           </div>
 
