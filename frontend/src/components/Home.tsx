@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { BACKEND_URL } from './url';
 
 interface Book { // this should match with the struct definition of Book model in backend to directly use this
+  CreatedAt: string
+  DeletedAt: string
   ID: string;
-  Title: string;
-  Author: string;
-  Genre: string;
-  Rating: number;
+  UpdatedAt: string
+  author: string;
+  genre: string; // these must be exactly matching with the json body returned by api response
+  rating: number;
+  title: string;
 }
 
 
@@ -39,7 +42,7 @@ const Home: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `${token}` // try removing bearer
         },
         body: JSON.stringify({ title: title, author: author, genre: genre, rating: rating })
       });
@@ -65,7 +68,6 @@ const Home: React.FC = () => {
   };
 
   const handleFilter = async () => {
-    // console.log('Filtering books:', { rating: filterRating, genre: filterGenre });
     setIsLoading(true);
     try {
 
@@ -81,7 +83,8 @@ const Home: React.FC = () => {
         throw new Error('Failed to fetch books');
       }
       const data = await response.json();
-      setBooks(data.data); // need to change this according to the response format 
+      setBooks(data.data); 
+      // console.log(data.data)
       setTotalPages(Math.ceil(data.total / parseInt(data.limit)));
       setCurrentPage(parseInt(data.page) || 1);
 
@@ -101,7 +104,6 @@ const Home: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // Search book by ID logic here
     console.log('Searching for book with ID:', searchId);
   };
 
@@ -219,10 +221,10 @@ const Home: React.FC = () => {
               {books.map((book) => (
                 <tr key={book.ID}>
                   <td className="border border-gray-300 p-2">{book.ID}</td>
-                  <td className="border border-gray-300 p-2">{book.Title}</td>
-                  <td className="border border-gray-300 p-2">{book.Author}</td>
-                  <td className="border border-gray-300 p-2">{book.Genre}</td>
-                  <td className="border border-gray-300 p-2">{book.Rating}</td>
+                  <td className="border border-gray-300 p-2">{book.title}</td>
+                  <td className="border border-gray-300 p-2">{book.author}</td>
+                  <td className="border border-gray-300 p-2">{book.genre}</td>
+                  <td className="border border-gray-300 p-2">{book.rating}</td>
                 </tr>
               ))}
             </tbody>
