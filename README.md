@@ -1,8 +1,8 @@
 # library-api
 basic authentication system in Go<br>
 
-# Deployed on Digital Ocean
-[Book Library](https://book-library-bifas.ondigitalocean.app/)
+# Deployed link
+Book Library - (https://book-library-bifas.ondigitalocean.app/)
 
 # Local Setup
 Install dependencies:<br>
