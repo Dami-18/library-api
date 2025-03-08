@@ -16,7 +16,7 @@ func main() {
  	dbPort := os.Getenv("DB_PORT")
  	dbName := os.Getenv("DB_NAME")
 
-	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&tls=true", dbUser, dbPassword, dbHost, dbPort, dbName)
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", dbUser, dbPassword, dbHost, dbPort, dbName)
 	
 	port := os.Getenv("PORT")
 
