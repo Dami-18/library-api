@@ -1,7 +1,10 @@
 # library-api
 basic authentication system in Go<br>
 
-# Setup
+# Deployed on Digital Ocean
+[Book Library](https://book-library-bifas.ondigitalocean.app/)
+
+# Local Setup
 Install dependencies:<br>
 1. [Go](https://go.dev/doc/install)
 2. [MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/5.7/en/)
