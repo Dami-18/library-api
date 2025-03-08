@@ -13,7 +13,7 @@ func InitRouter() *gin.Engine {
 
 	// configure cors 
 	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173"}
+	config.AllowOrigins = []string{"https://book-library-bifas.ondigitalocean.app/"} // deployed frontend link
 	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
 	config.AllowHeaders = []string{"Origin", "Authorization", "Content-Type"}
 	config.ExposeHeaders = []string{"Content-Length"}
