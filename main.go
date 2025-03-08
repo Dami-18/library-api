@@ -4,21 +4,24 @@ import (
 	"library-api/database"
 	"library-api/routes"
 	"fmt"
-	"log"
+	
 	"os"
 )
 
 func main() {
+
+	dbUser := os.Getenv("DB_USER")
+ 	dbPassword := os.Getenv("DB_PASSWORD")
+ 	dbHost := os.Getenv("DB_HOST")
+ 	dbPort := os.Getenv("DB_PORT")
+ 	dbName := os.Getenv("DB_NAME")
+
+	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&ssl-mode=REQUIRED", dbUser, dbPassword, dbHost, dbPort, dbName)
 	
-	dbString := os.Getenv("DATABASE_URL")
 	port := os.Getenv("PORT")
 
-	if dbString == "" || port == "" {
-		log.Fatal("Required environment variables are not set.")
-	}
-
 	// Connect to database and migrate
-	database.ConnectDb(dbString)
+	database.ConnectDb(connectionString)
 	database.Migrate()
 
 	// Initialize and run the router
