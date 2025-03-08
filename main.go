@@ -6,31 +6,23 @@ import (
 	"fmt"
 	"log"
 	"os"
-	
-	"github.com/joho/godotenv"
 )
-func main(){
 
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
+func main() {
+	
+	dbString := os.Getenv("DATABASE_URL")
+	port := os.Getenv("PORT")
+
+	if dbString == "" || port == "" {
+		log.Fatal("Required environment variables are not set.")
 	}
 
-	// dbUser := os.Getenv("DB_USER")
-	// dbPassword := os.Getenv("DB_PASSWORD")
-	// dbHost := os.Getenv("DB_HOST")
-	// dbPort := os.Getenv("DB_PORT")
-	// dbName := os.Getenv("DB_NAME")
+	// Connect to database and migrate
+	database.ConnectDb(dbString)
+	database.Migrate()
 
-	dbString := os.Getenv("DATABASE_URL")
-
-	connectionString := fmt.Sprintf(dbString)
-
-	database.ConnectDb(connectionString) 
-    database.Migrate()
-
+	// Initialize and run the router
 	router := routes.InitRouter()
-	port := os.Getenv("PORT")
-	portNum := fmt.Sprintf(":%s",port)
+	portNum := fmt.Sprintf(":%s", port)
 	router.Run(portNum)
 }
