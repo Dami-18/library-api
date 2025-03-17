@@ -2,7 +2,7 @@
 basic authentication system in Go<br>
 
 # Deployed link
-Book Library - (https://book-library-bifas.ondigitalocean.app/)
+Book Library - https://book-library-bifas.ondigitalocean.app/
 
 # Local Setup
 Install dependencies:<br>
